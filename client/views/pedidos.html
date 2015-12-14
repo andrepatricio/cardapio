@@ -1,0 +1,82 @@
+<div class="main">
+    <h3><span class="fa fa-cutlery"></span> Pedidos On-Line</h3>
+    <hr/>
+    <h4>Cardápio</h4>
+    <input class="form-control" type="text" ng-model="criterio"/>
+    <table class="table table-striped">
+        <tr>
+            <th><a href="" ng-click="campo = 'descricao';reverse=!reverse">Descrição</a></th>
+            <th><a href="" ng-click="campo = 'descricao';reverse=!reverse">Preço</a></th>
+        </tr>
+        <tr ng-repeat="item in cardapio | filter:{descricao: criterio} | orderBy:campo:reverse">
+            <td>{{item.descricao | limite:5}}</td>
+            <td>{{item.preco | currency}}</td>
+        </tr>
+    </table>
+    <div ng-show="pedidos.length > 0">
+        <h4>Pedidos</h4>
+        <table class="table table-striped">
+            <tr>
+                <th></th>
+                <th>Quantidade</th>
+                <th>Item</th>
+                <th>Imposto</th>
+                <th>Subtotal</th>
+                <th>Data</th>
+            </tr>
+            <tr ng-repeat="pedido in pedidos">
+                <td><input type="checkbox" ng-model="pedido.selecionado"/></td>
+                <td>{{pedido.quantidade}}</td>
+                <td>{{pedido.item.descricao | limite:5}}</td>
+                <td>{{pedido.imposto | currency}}</td>
+                <td>{{pedido.subtotal | currency}}</td>
+                <td>{{pedido.data | date:'dd/MM/yy'}}</td>
+            </tr>
+        </table>
+        <h3>{{total | currency}}</h3>
+    </div>
+    <form name="pedidoForm">
+        <input ng-class="{error: pedidoForm.quantidade.$invalid && pedidoForm.quantidade.$dirty}" 
+            class="form-control" 
+            type="number" 
+            ng-model="pedido.quantidade" 
+            name="quantidade" 
+            placeholder="Quantidade" 
+            ng-required="true"
+        />
+        <select class="form-control" 
+            ng-model="pedido.item" 
+            name="item" 
+            ng-options="item.descricao for item in cardapio" 
+            ng-required="true"
+        >
+            <option value="">Selecione um item</option>
+        </select>
+        <div style="position: relative;">
+            <input class="form-control" 
+                type="text" ng-model="pedido.telefone" 
+                name="telefone" placeholder="Telefone" 
+                ng-model-options="{debounce: {default: 500}}" 
+                ng-required="true" ng-pattern="/^\d{4}-\d{4}$/"
+            />
+            <span ng-show="pedidoForm.telefone.$invalid && pedidoForm.telefone.$dirty" 
+                class="fa fa-times" style="position: absolute; top: 10px; right: 10px; color: red">
+            </span>
+            <span ng-show="pedidoForm.telefone.$valid" class="fa fa-check" 
+                style="position: absolute; top: 10px; right: 10px; color: green">
+            </span>
+        </div>
+    </form>
+    <div ng-show="pedidoForm.quantidade.$invalid && pedidoForm.quantidade.$dirty" class="alert alert-danger">
+        Preencha o campo quantidade
+    </div>
+    <div ng-show="pedidoForm.item.$invalid && pedidoForm.item.$dirty" class="alert alert-danger">
+        Selecione um item
+    </div>
+    <div ng-show="pedidoForm.telefone.$error.required && pedidoForm.telefone.$dirty" class="alert alert-danger">
+        Selecione um telefone
+    </div>
+    
+    <button class="btn btn-primary btn-block" ng-click="fazerPedido(pedido)" ng-disabled="pedidoForm.$invalid"><span class="fa fa-plus"></span> Fazer Pedido</button>
+    <button ng-show="isSelecionado()" class="btn btn-danger btn-block" ng-click="cancelarPedidos()"><span class="fa fa-trash-o"></span> Cancelar Pedido</button>
+</div>
