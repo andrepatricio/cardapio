@@ -1,0 +1,12 @@
+{
+  "name": "client",
+  "homepage": "https://github.com/andrepatricio/cardapio",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "dependencies": {
+    "angular-i18n": "^1.5.8",
+    "angular-route": "^1.5.8",
+    "bootstrap": "^3.3.7"
+  }
+}
