@@ -7,6 +7,14 @@ angular.module("pedidos").config(function($routeProvider){
 				return apiService.getCardapio()
 			}
 		}
+	}).when("/administrativo", {
+		templateUrl: "views/administrativo.html",
+		controller: "administrativoCtrl",
+	//	resolve: {
+	//		cardapio: function(apiService){
+	//			return apiService.getCardapio()
+	//		}
+		//	}
 	}).otherwise({
 		redirectTo: "/pedidos"
 	});
